@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSE Test</title>
+  </head>
+  <body>
+    <h1>SSE Test</h1>
+    <div id="messages"></div>
+    <script>
+      // 创建 EventSource 对象
+      const eventSource = new EventSource('http://localhost:3000/sse');
+
+      // 监听消息事件
+      eventSource.onmessage = event => {
+        const data = JSON.parse(event.data);
+        const message = document.createElement('div');
+        message.textContent = `Time: ${data.time}`;
+        document.getElementById('messages').appendChild(message);
+      };
+
+      // 监听打开事件
+      eventSource.onopen = () => {
+        console.log('Connection opened');
+      };
+
+      // 监听错误事件
+      eventSource.onerror = error => {
+        console.error('SSE error:', error);
+        eventSource.close();
+      };
+
+    </script>
+  </body>
+</html>
